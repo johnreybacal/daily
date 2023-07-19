@@ -21,3 +21,7 @@ In case I forget, which is very likely
     ```
     git subtree push --prefix dist origin gh-pages
     ```
+### Or run the script
+```
+. deploy.sh
+```
