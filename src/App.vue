@@ -1,9 +1,16 @@
 <template>
   <v-app>
     <v-app-bar prominent scroll-behavior="collapse">
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="drawer = !drawer">
+        <v-avatar :tile="true">
+          <v-img src="/sun.png" alt="logo" />
+        </v-avatar>
+      </v-app-bar-nav-icon>
 
-      <v-toolbar-title>daily</v-toolbar-title>
+      <v-toolbar-title>
+        <text style="color: #eb2626;">da</text>
+        <text style="color: #e58733;">ily</text>
+      </v-toolbar-title>
     </v-app-bar>
 
     <v-navigation-drawer
