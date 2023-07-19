@@ -3,7 +3,7 @@
     <v-app-bar prominent scroll-behavior="collapse">
       <v-app-bar-nav-icon @click="drawer = !drawer">
         <v-avatar :tile="true">
-          <v-img src="/sun.png" alt="logo" />
+          <v-img src="/daily/sun.png" alt="logo" />
         </v-avatar>
       </v-app-bar-nav-icon>
 
