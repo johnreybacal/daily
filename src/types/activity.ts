@@ -1,5 +1,9 @@
+import Quality from "./quality";
+
 export default class Activity {
-    name!: string;
-    description?: string;
+    id: string = new Date().toISOString();
+    name: string = '';
+    description?: string = '';
     isDone: boolean = false;
+    qualities: Quality = new Quality();
 }

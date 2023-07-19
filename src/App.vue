@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar prominent scroll-behavior="collapse">
-      <v-app-bar-nav-icon @click="drawer = !drawer">
+      <v-app-bar-nav-icon @click="showDrawer = !showDrawer">
         <v-avatar :tile="true">
           <v-img src="/daily/sun.png" alt="logo" />
         </v-avatar>
@@ -14,7 +14,7 @@
     </v-app-bar>
 
     <v-navigation-drawer
-      v-model="drawer"
+      v-model="showDrawer"
       temporary
     >
       <v-list
@@ -32,7 +32,7 @@
                 <v-card-subtitle>{{ day }}, {{ date }}{{ ord }} {{ year }}</v-card-subtitle>
                 <v-card-text>
                   <p class="text-right">
-                    <b>{{ todos.length }}</b> Tasks
+                    <b>{{ activities.length }}</b> Tasks
                   </p>
                   <v-text-field
                     v-model="newTodo"
@@ -43,15 +43,26 @@
                     :hint="todoExists"
                     persistent-hint
                   />
+                  <v-btn
+                    fab
+                    ripple
+                    small
+                    color="primary"
+                    icon="mdi-plus"
+                    size="x-small"
+                    @click="onAddActivity()"
+                  >
+                  </v-btn>
+
                   <p class="subheading">
-                    {{ todos.length === 0 ? "You have 0 Tasks, add some" : "Your Tasks" }}
+                    {{ activities.length === 0 ? "You have 0 Tasks, add some" : "Your Tasks" }}
                   </p>
                   <v-list>
                     <v-list-item-group>
                       <v-list-item
-                        v-for="(todo, i) in todos"
-                        v-bind:key="todo.name"
-                        :value="todo.name"
+                        v-for="(todo, i) in activities"
+                        v-bind:key="todo.id"
+                        :value="todo.id"
                         >
                         <template v-slot:prepend="{ select }">
                           <v-list-item-action start>
@@ -81,6 +92,16 @@
                             @click="removeTodo(i)"
                           >
                           </v-btn>
+                          <v-btn
+                            fab
+                            ripple
+                            small
+                            icon="mdi-circle-edit-outline"
+                            size="x-small"
+                            v-if="isSelected"
+                            @click="onEditActivity(i)"
+                          >
+                          </v-btn>
                         </template>
                       </v-list-item>
                     </v-list-item-group>
@@ -90,21 +111,34 @@
             </v-col>
           </v-row>
         </v-container>
+        <ActivityForm
+          :value="showActivityForm"
+          :isEdit="showEditForm"
+          :activity="selectedActivity"
+          :onClose="onCloseActivityForm"
+        ></ActivityForm>
       </v-theme-provider>
     </v-main>
+
   </v-app>
 </template>
 
 <script lang="ts">
 import Activity from '@/types/activity';
+import ActivityForm from '@/components/ActivityForm.vue';
 
 export default {
+  components: {
+    ActivityForm
+  },
   data() {
     return {
-      drawer: false,
-      show: true,
+      showDrawer: false,
+      showActivityForm: false,
+      showEditForm: false,
+      selectedActivity: new Activity(),
       newTodo: "",
-      todos: new Array<Activity>(),
+      activities: new Array<Activity>(),
       day: this.todoDay(),
       date: new Date().getDate(),
       ord: this.nth(new Date().getDate()),
@@ -129,13 +163,38 @@ export default {
   },
 
   methods: {
+    onAddActivity () {
+      this.showEditForm = false;
+      this.selectedActivity = new Activity();
+      this.showActivityForm = true;
+    },
+    onEditActivity (index: number) {
+      this.showEditForm = true;
+      this.selectedActivity = this.activities[index];
+      console.log(this.selectedActivity)
+      this.showActivityForm = true;
+    },
+    onCloseActivityForm (activity: Activity) {
+      this.showActivityForm = false;
+      
+      if (activity) {
+        const index = this.activities.map(e => e.id).indexOf(activity.id);
+  
+        if (index === -1) {
+          this.activities.push(activity);
+        } else {
+          this.activities[index] = activity;
+        }
+      }
+    },
+
     addTodo() {
       this.isTodoExist = false;
       const value = this.newTodo && this.newTodo.trim();
       if (!value) {
         return;
       }
-      const isTodoExists = this.todos.find(
+      const isTodoExists = this.activities.find(
         (todo: Activity) => todo.name === value
       );
       if (!isTodoExists) {
@@ -143,7 +202,7 @@ export default {
         activity.name = this.newTodo;
         activity.description = `Added on: ${this.date} ${this.ord} ${this.day} ${this.year}`
         
-        this.todos.push(activity);
+        this.activities.push(activity);
 
         this.newTodo = "";
       }
@@ -153,7 +212,7 @@ export default {
     },
 
     removeTodo(index: number) {
-      this.todos.splice(index, 1);
+      this.activities.splice(index, 1);
     },
 
     todoDay() {
