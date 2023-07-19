@@ -8,6 +8,7 @@
 
     <v-navigation-drawer
       v-model="drawer"
+      temporary
     >
       <v-list
         :items="items"
