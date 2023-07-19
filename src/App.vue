@@ -8,8 +8,8 @@
       </v-app-bar-nav-icon>
 
       <v-toolbar-title>
-        <text style="color: #eb2626;">da</text>
-        <text style="color: #e58733;">ily</text>
+        <text style="color: #eb2626;">d&nbsp;a&nbsp;</text>
+        <text style="color: #e58733;">i&nbsp;l&nbsp;y</text>
       </v-toolbar-title>
     </v-app-bar>
 
@@ -50,26 +50,26 @@
                     <v-list-item-group>
                       <v-list-item
                         v-for="(todo, i) in todos"
-                        v-bind:key="todo.title"
-                        :value="todo.title"
+                        v-bind:key="todo.name"
+                        :value="todo.name"
                         >
                         <template v-slot:prepend="{ select }">
                           <v-list-item-action start>
-                            <v-checkbox-btn v-model="todo.done" @click="select" ></v-checkbox-btn>
+                            <v-checkbox-btn v-model="todo.isDone" @click="select" ></v-checkbox-btn>
                           </v-list-item-action>
                         </template>
                         
                         <v-list-item-content>
                           <v-list-item-title>
-                            {{ todo.title }}
+                            {{ todo.name }}
                           </v-list-item-title>
     
                           <v-list-item-subtitle>
-                            Added on: {{ date }}{{ ord }} {{ day }} {{ year }}
+                            {{ todo.description }}
                           </v-list-item-subtitle>
                         </v-list-item-content>
 
-                        <template v-slot:append>
+                        <template v-slot:append="{ isSelected }">
                           <v-btn
                             fab
                             ripple
@@ -77,7 +77,7 @@
                             color="red"
                             icon="mdi-close"
                             size="x-small"
-                            v-if="todo.done"
+                            v-if="isSelected"
                             @click="removeTodo(i)"
                           >
                           </v-btn>
@@ -96,10 +96,7 @@
 </template>
 
 <script lang="ts">
-interface Todo {
-  title: string;
-  done: boolean;
-}
+import Activity from '@/types/activity';
 
 export default {
   data() {
@@ -107,7 +104,7 @@ export default {
       drawer: false,
       show: true,
       newTodo: "",
-      todos: new Array<Todo>(),
+      todos: new Array<Activity>(),
       day: this.todoDay(),
       date: new Date().getDate(),
       ord: this.nth(new Date().getDate()),
@@ -139,14 +136,14 @@ export default {
         return;
       }
       const isTodoExists = this.todos.find(
-        (todo: Todo) => todo.title === value
+        (todo: Activity) => todo.name === value
       );
       if (!isTodoExists) {
-        const todo: Todo = {
-          title: this.newTodo,
-          done: false,
-        };
-        this.todos.push(todo);
+        const activity: Activity = new Activity();
+        activity.name = this.newTodo;
+        activity.description = `Added on: ${this.date} ${this.ord} ${this.day} ${this.year}`
+        
+        this.todos.push(activity);
 
         this.newTodo = "";
       }
