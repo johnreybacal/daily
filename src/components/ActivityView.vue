@@ -62,23 +62,31 @@
     :activity="selectedActivity"
     :onClose="onCloseActivityForm"
   ></ActivityForm>
+  <ConfirmDialog
+    :value="showDeleteConfirm"
+    :yes-button-callback="onConfirmRemoveActivity"
+    :no-button-callback="() => { showDeleteConfirm = false }"
+  ></ConfirmDialog>
 </template>
 
 <script lang="ts">
 import Activity from '@/types/activity';
 import ActivityForm from '@/components/ActivityForm.vue';
 import ActivityList from '@/components/ActivityList.vue';
+import ConfirmDialog from '@/components/ConfirmDialog.vue';
 
 export default {
   name: 'ActivityView',
   components: {
     ActivityForm,
     ActivityList,
+    ConfirmDialog,
   },
   data() {
     return {
       showActivityForm: false,
       showEditForm: false,
+      showDeleteConfirm: false,
       selectedActivity: new Activity(),
       activities: new Array<Activity>(),
     };
@@ -100,6 +108,13 @@ export default {
       this.showActivityForm = true;
     },
     onRemoveActivity (index: number) {
+      this.selectedActivity = this.activities[index];
+      this.showDeleteConfirm = true;
+    },
+    onConfirmRemoveActivity () {
+      const index = this.activities.map(e => e.id).indexOf(this.selectedActivity.id);
+      
+      this.showDeleteConfirm = false;
       this.activities.splice(index, 1);
     },
     onCloseActivityForm (activity: Activity) {
