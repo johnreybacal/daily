@@ -12,12 +12,13 @@
       <v-card-text>
         <v-form
           v-model="isValid"
-          @submit.prevent>
+          @submit.prevent
+          >
           <v-row>
             <v-text-field
               label="Name"
               name="name"
-              v-model="data.name"
+              v-model.trim="data.name"
               :rules="rules"
               required
             ></v-text-field>
@@ -26,17 +27,18 @@
             <v-textarea
               label="Description"
               name="description"
-              v-model="data.description"
+              v-model.trim="data.description"
+              rows="3"
             ></v-textarea>
           </v-row>
           <v-row>
-            <v-combobox
+            <v-select
               v-model="selectedQualities"
               :items="qualities"
               label="This activity is"
               multiple
               chips
-            ></v-combobox>
+            ></v-select>
           </v-row>
         </v-form>
       </v-card-text>
