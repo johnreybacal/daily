@@ -30,13 +30,13 @@
             ></v-textarea>
           </v-row>
           <v-row>
-            <v-autocomplete
+            <v-combobox
+              v-model="selectedQualities"
               :items="qualities"
-              :value="data.qualities"
-              chips
-              closable-chips
+              label="This activity is"
               multiple
-              label="This activity is" ></v-autocomplete>
+              chips
+            ></v-combobox>
           </v-row>
         </v-form>
       </v-card-text>
@@ -87,10 +87,9 @@ export default {
           return 'This field is required.'
         },
       ],
-
       qualities: [
-        'What I love',
         'What I’m good at',
+        'What I love',
         'What I can be paid for',
         'What the world needs',
       ]
@@ -106,6 +105,32 @@ export default {
   computed: {
     showDialog() {
       return this.value;
+    },
+    selectedQualities: {
+      get() {
+        const qualities: string[] = [];
+
+        if (this.data.qualities.isGoodAt) {
+          qualities.push(this.qualities[0]);
+        }
+        if (this.data.qualities.isLoved) {
+          qualities.push(this.qualities[1]);
+        }
+        if (this.data.qualities.isPaidFor) {
+          qualities.push(this.qualities[2]);
+        }
+        if (this.data.qualities.isNeeded) {
+          qualities.push(this.qualities[3]);
+        }
+
+        return qualities;
+      },
+      set(qualities: string[]) {
+        this.data.qualities.isGoodAt = qualities.includes(this.qualities[0]);
+        this.data.qualities.isLoved = qualities.includes(this.qualities[1]);
+        this.data.qualities.isPaidFor = qualities.includes(this.qualities[2]);
+        this.data.qualities.isNeeded = qualities.includes(this.qualities[3]);
+      }
     }
   },
   watch: {
