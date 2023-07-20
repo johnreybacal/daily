@@ -63,8 +63,7 @@
                       <v-tooltip text="Edit">
                         <template v-slot:activator="{ props }">
                           <v-btn
-                          icon="mdi-circle-edit-outline"
-                            size="small"
+                            icon="mdi-pencil"
                             v-bind="props"
                             @click="onEditActivity(i)"
                           >
@@ -76,7 +75,6 @@
                         <template v-slot:activator="{ props }">
                           <v-btn
                             icon="mdi-close"
-                            size="small"
                             style="background-color: #ff8e7e;"
                             v-bind="props"
                             @click="onRemoveActivity(i)"

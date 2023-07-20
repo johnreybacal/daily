@@ -137,7 +137,9 @@ export default {
     value(show: Boolean) {
       if (show) {
         if (this.isEdit) {
-          this.data = this.activity;
+          this.data = {
+            ...this.activity
+          };
         } else {
           this.data = new Activity();
         }
