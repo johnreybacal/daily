@@ -24,7 +24,7 @@
 
     <v-main>
       <v-theme-provider root>
-        <ActivityList></ActivityList>
+        <ActivityView></ActivityView>
       </v-theme-provider>
     </v-main>
 
@@ -32,11 +32,11 @@
 </template>
 
 <script lang="ts">
-import ActivityList from '@/components/ActivityList.vue';
+import ActivityView from '@/components/ActivityView.vue';
 
 export default {
   components: {
-    ActivityList
+    ActivityView
   },
   data() {
     return {
