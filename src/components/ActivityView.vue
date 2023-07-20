@@ -74,6 +74,7 @@ import Activity from '@/types/activity';
 import ActivityForm from '@/components/ActivityForm.vue';
 import ActivityList from '@/components/ActivityList.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
+import db from '@/firebase/db'
 
 export default {
   name: 'ActivityView',
@@ -97,6 +98,21 @@ export default {
     }
   },
   methods: {
+    async getActivities () {
+      const records = await db.list()
+
+      records.forEach((record: any) => {
+        const activity: Activity = new Activity();
+
+        activity.id = record.id;
+        activity.name = record.name;
+        activity.description = record.description;
+        activity.isDone = record.isDone;
+        activity.qualities = record.qualities;
+
+        this.activities.push(activity);
+      });
+    },
     onAddActivity () {
       this.showEditForm = false;
       this.selectedActivity = new Activity();
@@ -117,7 +133,7 @@ export default {
       this.showDeleteConfirm = false;
       this.activities.splice(index, 1);
     },
-    onCloseActivityForm (activity: Activity) {
+    async onCloseActivityForm (activity: Activity) {
       this.showActivityForm = false;
       
       if (activity) {
@@ -125,12 +141,17 @@ export default {
   
         if (index === -1) {
           this.activities.push(activity);
+
+          await db.add(activity);
         } else {
           this.activities[index] = activity;
         }
       }
     },
   },
+  mounted() {
+    this.getActivities();  
+  }
 }
 </script>
 
