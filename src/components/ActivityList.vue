@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <v-row justify="center" class="ma-5">
+  <v-container class="remove-padding-on-s">
+    <v-row justify="center" class="mt-5 mb-5 remove-margin-on-s">
       <v-col xs="12" sm="8">
         <v-card>
           <v-card-title>
@@ -194,3 +194,17 @@ export default {
   },
 }
 </script>
+
+<style>
+/* Mobile */
+@media screen and (min-width: 1px) and (max-width: 480px) {
+  .remove-padding-on-s {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .remove-margin-on-s {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+</style>
