@@ -4,7 +4,8 @@
       <v-list-item
         v-for="(activity, i) in activities"
         v-bind:key="activity.id"
-        :value="activity.id"
+        :value="isEditable ? activity.id : null"
+        style="padding-left: 0px"
       >
         <template v-slot:prepend="{ select }" v-if="isEditable">
           <v-list-item-action start>

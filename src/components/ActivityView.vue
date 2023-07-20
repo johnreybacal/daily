@@ -3,17 +3,26 @@
     <v-row justify="center" class="mt-5 mb-5 remove-margin-on-s">
       <v-col cols="12" sm="12" md="8">
         <v-card>
-          <v-card-title>
-            activities
-          </v-card-title>
-          <v-card-actions>
-            <v-btn
-              prepend-icon="mdi-plus"
-              @click="onAddActivity()"
-            >
-              Add Activity
-            </v-btn>
-          </v-card-actions>
+          <v-row>
+            <v-col>
+              <v-card-title>
+                activities
+              </v-card-title>
+            </v-col>
+            <v-col>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  prepend-icon="mdi-plus"
+                  variant="outlined"
+                  class="mr-2"
+                  @click="onAddActivity()"
+                >
+                  Add Activity
+                </v-btn>
+              </v-card-actions>
+            </v-col>
+          </v-row>
           <v-card-text>
             <p class="subheading">
               {{ activities.length === 0 ? "You have nothing to do" : "Things to do:" }}

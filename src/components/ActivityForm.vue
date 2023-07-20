@@ -7,7 +7,7 @@
     >
     <v-card>
       <v-card-title>
-        {{ isEdit ? 'Edit' : 'New' }} Activity
+        {{ isEdit ? 'edit' : 'new' }} activity
       </v-card-title>
       <v-card-text>
         <v-form
@@ -44,10 +44,10 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue-darken-1" variant="text" @click="onClose()">
+        <v-btn variant="text" @click="onClose()">
           Close
         </v-btn>
-        <v-btn color="blue-darken-1" variant="text" @click="onSave">
+        <v-btn color="blue-darken-1" variant="outlined" @click="onSave">
           Save
         </v-btn>
       </v-card-actions>
