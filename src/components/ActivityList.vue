@@ -35,7 +35,7 @@
           </v-card-title>
           <v-card-text>
             <p class="subheading">
-              {{ completedActivities.length === 0 ? "You have done anything yet" : "Activities completed:" }}
+              {{ completedActivities.length === 0 ? "You haven’t done anything yet" : "Activities completed:" }}
             </p>
             <ActivityListItem
               :activities="completedActivities"

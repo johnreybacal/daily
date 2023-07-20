@@ -138,7 +138,10 @@ export default {
       if (show) {
         if (this.isEdit) {
           this.data = {
-            ...this.activity
+            ...this.activity,
+            qualities: {
+              ...this.activity.qualities
+            }
           };
         } else {
           this.data = new Activity();
