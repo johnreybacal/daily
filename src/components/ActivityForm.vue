@@ -15,30 +15,45 @@
           @submit.prevent
           >
           <v-row>
-            <v-text-field
-              label="Name"
-              name="name"
-              v-model.trim="data.name"
-              :rules="rules"
-              required
-            ></v-text-field>
+            <v-col cols="12" :md="isEdit ? '8' : '12'">
+              <v-text-field
+                label="Name"
+                name="name"
+                v-model.trim="data.name"
+                :rules="rules"
+                variant="underlined"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12" md="4" v-if="isEdit" class="text-right">
+              <v-checkbox
+                label="Completed"
+                v-model="data.isDone"
+              ></v-checkbox>
+            </v-col>
           </v-row>
           <v-row>
-            <v-textarea
-              label="Description"
-              name="description"
-              v-model.trim="data.description"
-              rows="3"
-            ></v-textarea>
+            <v-col>
+              <v-textarea
+                label="Description"
+                name="description"
+                v-model.trim="data.description"
+                rows="3"
+                variant="underlined"
+              ></v-textarea>
+            </v-col>
           </v-row>
           <v-row>
-            <v-select
-              v-model="selectedQualities"
-              :items="qualities"
-              label="This activity is"
-              multiple
-              chips
-            ></v-select>
+            <v-col>
+              <v-select
+                v-model="selectedQualities"
+                :items="qualities"
+                label="This activity is"
+                variant="underlined"
+                multiple
+                chips
+              ></v-select>
+            </v-col>
           </v-row>
         </v-form>
       </v-card-text>

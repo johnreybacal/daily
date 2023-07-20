@@ -1,7 +1,7 @@
 import Quality from "./quality";
 
 export default class Activity {
-    id: string = new Date().toISOString();
+    id?: string;
     name: string = '';
     description?: string = '';
     isDone: boolean = false;

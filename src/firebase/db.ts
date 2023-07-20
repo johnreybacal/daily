@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import type Activity from "@/types/activity";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, getDocs, addDoc } from "firebase/firestore"; 
+import { getFirestore, collection, doc, getDocs, addDoc, setDoc, deleteDoc } from "firebase/firestore"; 
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -27,23 +27,40 @@ export default {
   async list() {
     const activitiesCol = collection(db, 'activities');
     const activitySnapshot = await getDocs(activitiesCol);
+
     const activityList = activitySnapshot.docs.map((doc) => {
       return {
         ...doc.data(),
         id: doc.id
       }
     });
-    console.log(activityList)
+
     return activityList;
   },
   async add(activity: Activity) {
+    delete activity.id;
+
     const docRef = await addDoc(collection(db, 'activities'), {
       ...activity,
       qualities: {
         ...activity.qualities
       }
     });
-    console.log(docRef.id)
+
     return docRef.id;
+  },
+  async update(activity: Activity) {
+    const id = activity.id!;
+    delete activity.id;
+
+    await setDoc(doc(db, 'activities', id), {
+      ...activity,
+      qualities: {
+        ...activity.qualities
+      }
+    });
+  },
+  async delete(id: string) {
+    await deleteDoc(doc(db, 'activities', id));
   }
 }

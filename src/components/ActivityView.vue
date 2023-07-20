@@ -104,7 +104,7 @@ export default {
       records.forEach((record: any) => {
         const activity: Activity = new Activity();
 
-        if (record && record.id) {
+        if (record) {
           activity.id = record.id;
           activity.name = record.name;
           activity.description = record.description;
@@ -129,9 +129,10 @@ export default {
       this.selectedActivity = this.activities[index];
       this.showDeleteConfirm = true;
     },
-    onConfirmRemoveActivity () {
+    async onConfirmRemoveActivity () {
       const index = this.activities.map(e => e.id).indexOf(this.selectedActivity.id);
       
+      await db.delete(this.selectedActivity.id!);
       this.showDeleteConfirm = false;
       this.activities.splice(index, 1);
     },
@@ -147,6 +148,8 @@ export default {
             id: id
           });
         } else {
+          await db.update(activity);
+
           this.activities[index] = activity;
         }
       }
