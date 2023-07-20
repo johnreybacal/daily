@@ -1,7 +1,7 @@
 <template>
   <v-container class="remove-padding-on-s">
     <v-row justify="center" class="mt-5 mb-5 remove-margin-on-s">
-      <v-col sm="12" md="8">
+      <v-col cols="12" sm="12" md="8">
         <v-card>
           <v-card-title>
             activities
@@ -28,7 +28,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col sm="12" md="4">
+      <v-col cols="12" sm="12" md="4">
         <v-card>
           <v-card-title>
             done
