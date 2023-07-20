@@ -104,11 +104,13 @@ export default {
       records.forEach((record: any) => {
         const activity: Activity = new Activity();
 
-        activity.id = record.id;
-        activity.name = record.name;
-        activity.description = record.description;
-        activity.isDone = record.isDone;
-        activity.qualities = record.qualities;
+        if (record && record.id) {
+          activity.id = record.id;
+          activity.name = record.name;
+          activity.description = record.description;
+          activity.isDone = record.isDone;
+          activity.qualities = record.qualities;
+        }
 
         this.activities.push(activity);
       });
@@ -134,19 +136,21 @@ export default {
       this.activities.splice(index, 1);
     },
     async onCloseActivityForm (activity: Activity) {
-      this.showActivityForm = false;
-      
       if (activity) {
         const index = this.activities.map(e => e.id).indexOf(activity.id);
   
         if (index === -1) {
-          this.activities.push(activity);
+          const id: string = await db.add(activity);
 
-          await db.add(activity);
+          this.activities.push({
+            ...activity,
+            id: id
+          });
         } else {
           this.activities[index] = activity;
         }
       }
+      this.showActivityForm = false;
     },
   },
   mounted() {
