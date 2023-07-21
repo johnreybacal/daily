@@ -2,7 +2,15 @@
   <v-container class="remove-padding-on-s">
     <v-row justify="center" class="mt-5 mb-5 remove-margin-on-s">
       <v-col cols="12" sm="12" md="8">
-        <v-card>
+        <v-card :loading="isLoading && !showActivityForm && !showDeleteConfirm">
+          <template v-slot:loader="{ isActive }">
+            <v-progress-linear
+              :active="isActive"
+              color="red"
+              height="4"
+              indeterminate
+            ></v-progress-linear>
+          </template>
           <v-row>
             <v-col>
               <v-card-title>
@@ -61,11 +69,13 @@
     :isEdit="showEditForm"
     :activity="selectedActivity"
     :onClose="onCloseActivityForm"
+    :is-loading="isLoading"
   ></ActivityForm>
   <ConfirmDialog
     :value="showDeleteConfirm"
     :yes-button-callback="onConfirmRemoveActivity"
     :no-button-callback="() => { showDeleteConfirm = false }"
+    :is-loading="isLoading"
   ></ConfirmDialog>
 </template>
 
@@ -88,6 +98,7 @@ export default {
       showActivityForm: false,
       showEditForm: false,
       showDeleteConfirm: false,
+      isLoading: false,
       selectedActivity: new Activity(),
       activities: new Array<Activity>(),
     };
@@ -99,6 +110,8 @@ export default {
   },
   methods: {
     async getActivities () {
+      this.isLoading = true;
+
       const records = await db.list()
 
       records.forEach((record: any) => {
@@ -114,6 +127,8 @@ export default {
 
         this.activities.push(activity);
       });
+
+      this.isLoading = false;
     },
     onAddActivity () {
       this.showEditForm = false;
@@ -131,13 +146,16 @@ export default {
     },
     async onConfirmRemoveActivity () {
       const index = this.activities.map(e => e.id).indexOf(this.selectedActivity.id);
+      this.isLoading = true;
       
       await db.delete(this.selectedActivity.id!);
       this.showDeleteConfirm = false;
+      this.isLoading = false;
       this.activities.splice(index, 1);
     },
     async onCloseActivityForm (activity: Activity) {
       if (activity) {
+        this.isLoading = true;
         const index = this.activities.map(e => e.id).indexOf(activity.id);
   
         if (index === -1) {
@@ -152,6 +170,8 @@ export default {
 
           this.activities[index] = activity;
         }
+
+        this.isLoading = false;
       }
       this.showActivityForm = false;
     },

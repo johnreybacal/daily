@@ -59,6 +59,8 @@ export default {
         ...activity.qualities
       }
     });
+
+    activity.id = id;
   },
   async delete(id: string) {
     await deleteDoc(doc(db, 'activities', id));

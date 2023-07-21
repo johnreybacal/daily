@@ -5,7 +5,15 @@
     persistent
     content-class="v-dialog--custom"
     >
-    <v-card>
+    <v-card :loading="isLoading">
+      <template v-slot:loader="{ isActive }">
+        <v-progress-linear
+          :active="isActive"
+          color="red"
+          height="4"
+          indeterminate
+        ></v-progress-linear>
+      </template>
       <v-card-title>
         {{ isEdit ? 'edit' : 'new' }} activity
       </v-card-title>
@@ -90,6 +98,10 @@ export default {
     },
     onClose: {
       type: Function,
+      required: true
+    },
+    isLoading: {
+      type: Boolean,
       required: true
     }
   },

@@ -4,7 +4,15 @@
     transition="dialog-bottom-transition"
     max-width="300px"
   >
-    <v-card>
+    <v-card :loading="isLoading">
+      <template v-slot:loader="{ isActive }">
+        <v-progress-linear
+          :active="isActive"
+          color="red"
+          height="4"
+          indeterminate
+        ></v-progress-linear>
+      </template>
       <v-card-title>
         {{ title }}
       </v-card-title>
@@ -61,6 +69,10 @@ export default {
       type: Function,
       required: true
     },
+    isLoading: {
+      type: Boolean,
+      required: true
+    }
   },
   data() {
     return {
