@@ -84,7 +84,7 @@ import Activity from '@/types/activity';
 import ActivityForm from '@/components/ActivityForm.vue';
 import ActivityList from '@/components/ActivityList.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
-import db from '@/firebase/db'
+import db from '@/db/localStorage'
 
 export default {
   name: 'ActivityView',
@@ -111,7 +111,7 @@ export default {
   methods: {
     async getActivities () {
       this.isLoading = true;
-
+      console.log(db)
       const records = await db.list()
 
       records.forEach((record: any) => {

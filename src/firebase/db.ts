@@ -47,7 +47,7 @@ export default {
       }
     });
 
-    return docRef.id;
+    activity.id = docRef.id;
   },
   async update(activity: Activity) {
     const id = activity.id!;
