@@ -8,7 +8,7 @@ git add dist -f
 git commit -m "Deploy build"
 
 # Push
-git subtree push --prefix dist origin gh-pages
+git subtree push --prefix dist origin web-build
 
 # Undo commit on working branch
 git reset HEAD~
