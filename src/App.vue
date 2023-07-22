@@ -24,23 +24,33 @@
 
     <v-main>
       <v-theme-provider root>
-        <ActivityView></ActivityView>
+        <ActivityView
+        ></ActivityView>
       </v-theme-provider>
     </v-main>
+
+    <SelectPersistenceDialog
+      :show="showPersistenceSelect"
+      :on-proceed="onPersistenceSelected"
+    >
+    </SelectPersistenceDialog>
 
   </v-app>
 </template>
 
 <script lang="ts">
 import ActivityView from '@/components/ActivityView.vue';
+import SelectPersistenceDialog from '@/components/SelectPersistenceDialog.vue';
 
 export default {
   components: {
-    ActivityView
+    ActivityView,
+    SelectPersistenceDialog
   },
   data() {
     return {
       showDrawer: false,
+      showPersistenceSelect: true,
       items: [
         {
           title: 'My ikigai',
@@ -51,8 +61,12 @@ export default {
           value: 'activities',
         },
       ],
-
     };
   },
+  methods: {
+    onPersistenceSelected(value: string) {
+      this.showPersistenceSelect = false;
+    }
+  }
 };
 </script>
