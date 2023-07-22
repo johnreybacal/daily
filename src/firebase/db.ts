@@ -28,14 +28,16 @@ export default {
     const activitiesCol = collection(db, 'activities');
     const activitySnapshot = await getDocs(activitiesCol);
 
-    const activityList = activitySnapshot.docs.map((doc) => {
-      return {
+    const activities: Array<any> = [];
+
+    activitySnapshot.docs.forEach((doc) => {
+      activities.push({
         ...doc.data(),
-        id: doc.id
-      }
+        id: doc.id,
+      })
     });
 
-    return activityList;
+    return activities;
   },
   async add(activity: Activity) {
     delete activity.id;

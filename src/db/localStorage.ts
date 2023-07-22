@@ -8,21 +8,22 @@ import type ActivityService from "@/service/activityService";
 import Activity from "@/types/activity";
 
 class LocalStorage implements ActivityService {
-  public list(): Array<Activity> {
+  public list(): Promise<Activity[]> {
     const idList = this.getIdList();
-    const activities: Array<Activity> = new Array<Activity>();
+    const activities: Activity[] = new Array<Activity>();
 
     idList.forEach((id: string) => {
-      const json = this.get(id);
-      activities.push(json);
+      this.get(id).then((json) => {
+        activities.push(json);
+      });
     });
 
-    return activities;
+    return Promise.resolve(activities);
   }
-  public get(id: string): Activity {
+  public get(id: string): Promise<Activity> {
     const json = JSON.parse(localStorage.getItem(id) ?? '{}')
     
-    return Object.keys.length ? json : undefined;
+    return Promise.resolve(Object.keys.length ? json : undefined);
   }
   public add(activity: Activity) {
     activity.id = new Date().toISOString();
@@ -52,6 +53,6 @@ class LocalStorage implements ActivityService {
   }
 }
 
-const db: ActivityService = new LocalStorage();
+const localStorageDB: ActivityService = new LocalStorage();
 
-export default db;
+export default localStorageDB;

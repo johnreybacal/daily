@@ -84,7 +84,8 @@ import Activity from '@/types/activity';
 import ActivityForm from '@/components/ActivityForm.vue';
 import ActivityList from '@/components/ActivityList.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
-import db from '@/db/localStorage'
+import type ActivityService from "@/service/activityService";
+import type { PropType } from 'vue'
 
 export default {
   name: 'ActivityView',
@@ -92,6 +93,12 @@ export default {
     ActivityForm,
     ActivityList,
     ConfirmDialog,
+  },
+  props: {
+    db: {
+      type: Object as PropType<ActivityService>,
+      required: true,
+    }
   },
   data() {
     return {
@@ -111,8 +118,7 @@ export default {
   methods: {
     async getActivities () {
       this.isLoading = true;
-      console.log(db)
-      const records = await db.list()
+      const records = await this.db.list();
 
       records.forEach((record: any) => {
         const activity: Activity = new Activity();
@@ -148,7 +154,7 @@ export default {
       const index = this.activities.map(e => e.id).indexOf(this.selectedActivity.id);
       this.isLoading = true;
       
-      await db.delete(this.selectedActivity.id!);
+      await this.db.delete(this.selectedActivity.id!);
       this.showDeleteConfirm = false;
       this.isLoading = false;
       this.activities.splice(index, 1);
@@ -159,14 +165,11 @@ export default {
         const index = this.activities.map(e => e.id).indexOf(activity.id);
   
         if (index === -1) {
-          const id: string = await db.add(activity);
+          this.db.add(activity)
 
-          this.activities.push({
-            ...activity,
-            id: id
-          });
+          this.activities.push(activity);
         } else {
-          await db.update(activity);
+          await this.db.update(activity);
 
           this.activities[index] = activity;
         }
@@ -176,9 +179,12 @@ export default {
       this.showActivityForm = false;
     },
   },
-  mounted() {
-    this.getActivities();  
-  }
+  watch: {
+    db(value) {
+      console.log(value);
+      this.getActivities();
+    }
+  },
 }
 </script>
 

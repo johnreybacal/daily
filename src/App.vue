@@ -25,6 +25,7 @@
     <v-main>
       <v-theme-provider root>
         <ActivityView
+          :db="db"
         ></ActivityView>
       </v-theme-provider>
     </v-main>
@@ -41,6 +42,10 @@
 <script lang="ts">
 import ActivityView from '@/components/ActivityView.vue';
 import SelectPersistenceDialog from '@/components/SelectPersistenceDialog.vue';
+import type ActivityService from "@/service/activityService";
+import LocalStorage from '@/db/localStorage'
+import Firebase from '@/db/firebase'
+import None from '@/db/none'
 
 export default {
   components: {
@@ -61,11 +66,17 @@ export default {
           value: 'activities',
         },
       ],
+      db: None,
     };
   },
   methods: {
     onPersistenceSelected(value: string) {
       this.showPersistenceSelect = false;
+      if (value === 'localStorage') {
+        this.db = LocalStorage;
+      } else if (value === 'firebase') {
+        this.db = Firebase;
+      }
     }
   }
 };
