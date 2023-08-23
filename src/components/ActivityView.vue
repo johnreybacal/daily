@@ -32,6 +32,7 @@
             </v-col>
           </v-row>
           <v-card-text>
+            <ActivityFilter :filter="filter"></ActivityFilter>
             <p class="subheading">
               {{ activities.length === 0 ? "You have nothing to do" : "Things to do:" }}
             </p>
@@ -81,6 +82,7 @@
 
 <script lang="ts">
 import Activity from '@/types/activity';
+import ActivityFilter from '@/components/ActivityFilter.vue';
 import ActivityForm from '@/components/ActivityForm.vue';
 import ActivityList from '@/components/ActivityList.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
@@ -90,6 +92,7 @@ import type { PropType } from 'vue'
 export default {
   name: 'ActivityView',
   components: {
+    ActivityFilter,
     ActivityForm,
     ActivityList,
     ConfirmDialog,
@@ -108,6 +111,11 @@ export default {
       isLoading: false,
       selectedActivity: new Activity(),
       activities: new Array<Activity>(),
+      filter: {
+        keyword: '',
+        isDone: false,
+        qualities: []
+      }
     };
   },
   computed: {
