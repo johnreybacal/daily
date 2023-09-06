@@ -1,18 +1,28 @@
 <template>
-  <v-text-field
-    placeholder="Filter"
-    variant="underlined"
-    prepend-icon="mdi-filter-outline"
-    id="filter"
-  ></v-text-field>
   <v-menu
     :close-on-content-click="false"
     location="bottom"
-    activator="#filter"
   >
+    <template v-slot:activator="{ props }">
+      <v-btn
+        prepend-icon="mdi-filter-outline"
+        variant="outlined"
+        v-bind="props"
+      >
+        Filter
+      </v-btn>
+    </template>
     <v-card min-width="300">
+      <v-card-title>
+        Filter
+      </v-card-title>
       <v-card-text>
-        <v-checkbox label="Completed Activities"></v-checkbox>
+        <v-text-field
+          placeholder="Filter by keyword"
+          variant="underlined"
+          append-icon="mdi-magnify"
+          id="filter"
+        ></v-text-field>
         <v-select
           v-model="selectedQualities"
           :items="qualities"
@@ -21,6 +31,7 @@
           multiple
           chips
         ></v-select>
+        <v-checkbox label="Filter by completion"></v-checkbox>
       </v-card-text>
 
       <v-card-actions>

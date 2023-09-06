@@ -11,31 +11,44 @@
               indeterminate
             ></v-progress-linear>
           </template>
-          <v-row>
+          <v-row align="center" justify="space-between">
             <v-col>
               <v-card-title>
                 activities
               </v-card-title>
             </v-col>
             <v-col>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  prepend-icon="mdi-plus"
-                  variant="outlined"
-                  class="mr-2"
-                  @click="onAddActivity()"
-                >
-                  Add Activity
-                </v-btn>
-              </v-card-actions>
+              <div class="d-flex justify-end">
+                <v-card-actions>
+                  <v-btn
+                    prepend-icon="mdi-plus"
+                    variant="outlined"
+                    class="mr-2"
+                    @click="onAddActivity()"
+                    >
+                    Add Activity
+                  </v-btn>
+                </v-card-actions>
+              </div>
             </v-col>
           </v-row>
           <v-card-text>
-            <ActivityFilter :filter="filter"></ActivityFilter>
-            <p class="subheading">
-              {{ activities.length === 0 ? "You have nothing to do" : "Things to do:" }}
-            </p>
+            <v-row align="center" justify="space-between">
+              <v-col>
+                <p class="subheading">
+                  {{ activities.length === 0 ? "You have nothing to do" : "Things to do:" }}
+                </p>
+              </v-col>
+              <v-spacer></v-spacer>
+              <v-col>
+                <div
+                  v-if="activities.length > 0"
+                  class="d-flex justify-end"
+                >
+                  <ActivityFilter :filter="filter"></ActivityFilter>
+                </div>
+              </v-col>
+            </v-row>
             <ActivityList
               :activities="activities"
               :isEditable="true"
