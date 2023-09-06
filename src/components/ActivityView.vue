@@ -36,7 +36,12 @@
             <v-row align="center" justify="space-between">
               <v-col>
                 <p class="subheading">
-                  {{ activities.length === 0 ? "You have nothing to do" : "Things to do:" }}
+                  {{ activities.length === 0 
+                    ? "You have nothing to do"
+                    : (filteredActivities.length != activities.length)
+                      ? `Showing ${filteredActivities.length} of ${activities.length} activities:`
+                      : "Things to do:"
+                  }}
                 </p>
               </v-col>
               <v-spacer></v-spacer>
