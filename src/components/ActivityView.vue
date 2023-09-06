@@ -45,12 +45,14 @@
                   v-if="activities.length > 0"
                   class="d-flex justify-end"
                 >
-                  <ActivityFilter :filter="filter"></ActivityFilter>
+                  <ActivityFilter
+                    :on-filter="onFilter"
+                  ></ActivityFilter>
                 </div>
               </v-col>
             </v-row>
             <ActivityList
-              :activities="activities"
+              :activities="filteredActivities"
               :isEditable="true"
               :onEditActivity="onEditActivity"
               :onRemoveActivity="onRemoveActivity"
@@ -95,6 +97,7 @@
 
 <script lang="ts">
 import Activity from '@/types/activity';
+import Quality from '@/types/quality';
 import ActivityFilter from '@/components/ActivityFilter.vue';
 import ActivityForm from '@/components/ActivityForm.vue';
 import ActivityList from '@/components/ActivityList.vue';
@@ -126,12 +129,41 @@ export default {
       activities: new Array<Activity>(),
       filter: {
         keyword: '',
-        isDone: false,
-        qualities: []
+        qualities: new Quality(),
+        isDone: false
       }
     };
   },
   computed: {
+    filteredActivities() {
+      return this.activities.filter((activity) => {
+        const keywordMatch = this.filter.keyword === ''
+          ? true
+          : activity.name.toLowerCase().includes(this.filter.keyword.toLowerCase());
+        
+        const filterQualities = this.filter.qualities;
+        let qualityMatch = true;
+        if (
+          filterQualities.isGoodAt ||
+          filterQualities.isLoved ||
+          filterQualities.isNeeded ||
+          filterQualities.isPaidFor
+        ) {
+          const activityQualities = activity.qualities;
+
+          qualityMatch =
+            (activityQualities.isGoodAt && filterQualities.isGoodAt) ||
+            (activityQualities.isLoved && filterQualities.isLoved) ||
+            (activityQualities.isNeeded && filterQualities.isNeeded) ||
+            (activityQualities.isPaidFor && filterQualities.isPaidFor);
+        }
+        const completionMatch = this.filter.isDone
+          ? activity.isDone
+          : true;
+
+        return keywordMatch && qualityMatch && completionMatch;
+      });
+    },
     completedActivities() {
       return this.activities.filter((activity) => activity.isDone);
     }
@@ -156,6 +188,14 @@ export default {
       });
 
       this.isLoading = false;
+    },
+    onFilter (data: any) {
+      this.filter = {
+        ...data,
+        qualities: {
+          ...data.qualities
+        }
+      };
     },
     onAddActivity () {
       this.showEditForm = false;
