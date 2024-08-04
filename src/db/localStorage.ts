@@ -6,50 +6,57 @@
 
 import type ActivityService from "@/service/activityService";
 import Activity from "@/types/activity";
+import { Model, type Schema } from "localstorage-orm";
+
+interface ActivitySchema extends Schema, Omit<Activity, "id"> {}
+
+const model = new Model<ActivitySchema>("activity");
 
 class LocalStorage implements ActivityService {
   public list(): Promise<Activity[]> {
-    const idList = this.getIdList();
-    const activities: Activity[] = new Array<Activity>();
-
-    idList.forEach((id: string) => {
-      this.get(id).then((json) => {
-        activities.push(json);
-      });
+    return new Promise(function (resolve, reject) {
+      try {
+        resolve(model.list());
+      } catch (e) {
+        reject(e);
+      }
     });
-
-    return Promise.resolve(activities);
   }
   public get(id: string): Promise<Activity> {
-    const json = JSON.parse(localStorage.getItem(id) ?? '{}')
-    
-    return Promise.resolve(Object.keys.length ? json : undefined);
+    return new Promise(function (resolve, reject) {
+      try {
+        resolve(model.get(id));
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
   public add(activity: Activity) {
-    activity.id = new Date().toISOString();
-
-    const idList = this.getIdList();
-    idList.push(activity.id);
-    this.saveIdList(idList)
-
-    localStorage.setItem(activity.id, JSON.stringify(activity));
+    return new Promise(function (resolve, reject) {
+      try {
+        resolve(model.create(activity));
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
   public update(activity: Activity) {
-    localStorage.setItem(activity.id!, JSON.stringify(activity));
+    return new Promise(function (resolve, reject) {
+      try {
+        resolve(model.update(activity.id!, activity));
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
   public delete(id: string) {
-    const idList = this.getIdList();
-    idList.splice(idList.indexOf(id), 1)
-    this.saveIdList(idList)
-
-    localStorage.removeItem(id);
-  }
-
-  private getIdList(): Array<string> {
-    return JSON.parse(localStorage.getItem("activityList") ?? '[]') ?? [];
-  }
-  private saveIdList(idList: Array<string>) {
-    return localStorage.setItem('activityList', JSON.stringify(idList))
+    return new Promise(function (resolve, reject) {
+      try {
+        resolve(model.delete(id));
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 }
 
