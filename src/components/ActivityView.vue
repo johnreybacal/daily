@@ -36,7 +36,7 @@
             <v-row align="center" justify="space-between">
               <v-col>
                 <p class="subheading">
-                  {{ activities.length === 0 
+                  {{ activities.length === 0
                     ? "You have nothing to do"
                     : (filteredActivities.length != activities.length)
                       ? `Showing ${filteredActivities.length} of ${activities.length} activities:`
@@ -61,6 +61,7 @@
               :isEditable="true"
               :onEditActivity="onEditActivity"
               :onRemoveActivity="onRemoveActivity"
+              :onToggleActivity="onToggleActivity"
             >
             </ActivityList>
           </v-card-text>
@@ -101,14 +102,14 @@
 </template>
 
 <script lang="ts">
-import Activity from '@/types/activity';
-import Quality from '@/types/quality';
 import ActivityFilter from '@/components/ActivityFilter.vue';
 import ActivityForm from '@/components/ActivityForm.vue';
 import ActivityList from '@/components/ActivityList.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import type ActivityService from "@/service/activityService";
-import type { PropType } from 'vue'
+import Activity from '@/types/activity';
+import Quality from '@/types/quality';
+import type { PropType } from 'vue';
 
 export default {
   name: 'ActivityView',
@@ -145,7 +146,7 @@ export default {
         const keywordMatch = this.filter.keyword === ''
           ? true
           : activity.name.toLowerCase().includes(this.filter.keyword.toLowerCase());
-        
+
         const filterQualities = this.filter.qualities;
         let qualityMatch = true;
         if (
@@ -180,7 +181,6 @@ export default {
 
       records.forEach((record: any) => {
         const activity: Activity = new Activity();
-
         if (record) {
           activity.id = record.id;
           activity.name = record.name;
@@ -216,10 +216,15 @@ export default {
       this.selectedActivity = this.activities[index];
       this.showDeleteConfirm = true;
     },
+    async onToggleActivity (index: number) {
+      this.activities[index].isDone = !this.activities[index].isDone
+      await this.db.update(this.activities[index]);
+
+    },
     async onConfirmRemoveActivity () {
       const index = this.activities.map(e => e.id).indexOf(this.selectedActivity.id);
       this.isLoading = true;
-      
+
       await this.db.delete(this.selectedActivity.id!);
       this.showDeleteConfirm = false;
       this.isLoading = false;
@@ -229,7 +234,7 @@ export default {
       if (activity) {
         this.isLoading = true;
         const index = this.activities.map(e => e.id).indexOf(activity.id);
-  
+
         if (index === -1) {
           this.db.add(activity)
 

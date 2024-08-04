@@ -7,7 +7,7 @@
         :value="isEditable ? activity.id : null"
         style="padding-left: 0px"
       >
-        <template v-slot:prepend="{ select }" v-if="isEditable">
+        <template v-slot:prepend v-if="isEditable">
           <v-list-item-action start>
             <v-tooltip
               :text="
@@ -20,7 +20,7 @@
                 <v-checkbox-btn
                   v-model="activity.isDone"
                   v-bind="props"
-                  @click="select"
+                  @click="onToggleActivity(i)"
                 >
                 </v-checkbox-btn>
               </template>
@@ -138,6 +138,10 @@ export default {
       default: () => {},
     },
     onRemoveActivity: {
+      type: Function,
+      default: () => {},
+    },
+    onToggleActivity: {
       type: Function,
       default: () => {},
     },
