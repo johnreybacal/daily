@@ -73,7 +73,7 @@
               <template v-slot:activator="{ props }">
                 <v-icon
                   icon="mdi-thumb-up"
-                  color="blue"
+                  color="#AAD9CD"
                   v-bind="props"
                   v-if="activity.qualities.isGoodAt"
                 ></v-icon>
@@ -83,7 +83,7 @@
               <template v-slot:activator="{ props }">
                 <v-icon
                   icon="mdi-heart"
-                  color="red"
+                  color="#E9BBB5"
                   class="ml-1"
                   v-bind="props"
                   v-if="activity.qualities.isLoved"
@@ -93,7 +93,8 @@
             <v-tooltip text="I can be paid for this" location="bottom">
               <template v-slot:activator="{ props }">
                 <v-icon
-                  icon="mdi-cash-multiple"
+                  icon="mdi-cash"
+                  color="#8DA47E"
                   class="ml-1"
                   v-bind="props"
                   v-if="activity.qualities.isPaidFor"
@@ -104,7 +105,7 @@
               <template v-slot:activator="{ props }">
                 <v-icon
                   icon="mdi-earth"
-                  color="green"
+                  color="#938F43"
                   class="ml-1"
                   v-bind="props"
                   v-if="activity.qualities.isNeeded"
